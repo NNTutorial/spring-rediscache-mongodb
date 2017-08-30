@@ -1,0 +1,22 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.nishant.spring.redis.cache.property.RedisProperty",
+      "name": "spring",
+      "type": "com.nishant.spring.redis.cache.property.RedisProperty"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.nishant.spring.redis.cache.property.RedisProperty",
+      "name": "spring.data",
+      "type": "com.nishant.spring.redis.cache.property.Data"
+    },
+    {
+      "sourceType": "com.nishant.spring.redis.cache.property.RedisProperty",
+      "name": "spring.redis",
+      "type": "com.nishant.spring.redis.cache.property.Redis"
+    }
+  ]
+}
