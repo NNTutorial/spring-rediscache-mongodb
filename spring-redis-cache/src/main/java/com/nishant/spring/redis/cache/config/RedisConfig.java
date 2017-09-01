@@ -35,8 +35,8 @@ public class RedisConfig {
 	}
 
 	@Bean
-	public RedisTemplate<RedisVO, RedisVO> redisTemplate() {
-		RedisTemplate<RedisVO, RedisVO> rt=new RedisTemplate<>();
+	public RedisTemplate<String, RedisVO> redisTemplate() {
+		RedisTemplate<String, RedisVO> rt=new RedisTemplate<>();
 		rt.setConnectionFactory(jedisConnFactory());
 		rt.setKeySerializer(new StringRedisSerializer());
 		rt.setValueSerializer(redisValueConfigSerializer);
