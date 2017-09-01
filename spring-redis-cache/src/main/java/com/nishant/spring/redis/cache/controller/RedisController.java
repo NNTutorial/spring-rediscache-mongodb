@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -25,21 +26,26 @@ import com.nishant.spring.redis.cache.vo.RedisVO;
 @CacheConfig(cacheNames="redisVO")
 public class RedisController {
 
+	private static final String MONGODB_COLLECTION_NAME = "redisVO";
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
 	@RequestMapping(value="/set",method=RequestMethod.POST)
-	@Cacheable(keyGenerator="keyGenerator")
 	public RedisVO set(@RequestBody RedisVO redisVO){
-		System.out.println("method set executed"+redisVO.getDatabasename());
-		mongoTemplate.save(redisVO, "redisVO");
+		mongoTemplate.insert(redisVO, MONGODB_COLLECTION_NAME);
+		return redisVO;
+	}
+	@RequestMapping(value="/update",method=RequestMethod.POST)
+	@CachePut(keyGenerator="keyGenerator")
+	public RedisVO update(@RequestBody RedisVO redisVO){
+		mongoTemplate.save(redisVO, MONGODB_COLLECTION_NAME);
 		return redisVO;
 	}
 	@RequestMapping(value="/get/{Id}",method=RequestMethod.GET)
 	@Cacheable(keyGenerator="keyGenerator")
 	public RedisVO get(@PathVariable Integer Id) throws IOException {
 		System.out.println("method /get/{userId} executed"+Id);
-		return mongoTemplate.findById(Id,RedisVO.class, "redisVO");
+		return mongoTemplate.findById(Id,RedisVO.class, MONGODB_COLLECTION_NAME);
 	}
 
 	@RequestMapping(value="/del/{key}",method=RequestMethod.DELETE)
@@ -48,14 +54,15 @@ public class RedisController {
 		System.out.println("method /del/{key} executed"+key);
 		Query q=new Query();
 		q.addCriteria(Criteria.where("keyname").is(key));
-		mongoTemplate.findAndRemove(q,RedisVO.class, "redisVO");
+		mongoTemplate.findAndRemove(q,RedisVO.class, MONGODB_COLLECTION_NAME);
 		return "deleted key:"+key;
 	}
 
-	@ExceptionHandler(Exception.class)
+	/*@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public String invalidRequest(Exception e) {
 		return "invalid request";
 	}
+	*/
 
 }
