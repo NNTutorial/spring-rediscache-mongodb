@@ -58,11 +58,11 @@ public class RedisController {
 		return "deleted key:"+key;
 	}
 
-	/*@ExceptionHandler(Exception.class)
+	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public String invalidRequest(Exception e) {
 		return "invalid request";
 	}
-	*/
+
 
 }
